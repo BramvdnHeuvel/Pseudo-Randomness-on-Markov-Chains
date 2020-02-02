@@ -2,10 +2,21 @@ import json, random
 
 class MarkovChain:
     def load(self, file_name='names.txt'):
-        """Fill the Markov chain with names from a given file."""
-        with open(file_name, 'r') as reader:
-            for line in reader:
-                self.__add_weights(list(line))
+        """
+            Fill the Markov chain with names from a given file.
+            If the given `file_name` isn't recognized as an existing
+            txt or json file, the value is directly put into the
+            Markov Chain.
+        """
+        if file_name.endswith('.txt'):
+            with open(file_name, 'r') as reader:
+                for line in reader:
+                    self.__add_weights(list(line))
+        elif file_name.endswith('.json'):
+            self.markov = json.load(open(file_name, 'r'))
+        else:
+            # If the input is some raw data, directly cast it into the Markov chain.
+            self.__add_weights(list(file_name))
     
     def save(self, file_name='markov.json'):
         """Save the current Markov chain to a given file."""

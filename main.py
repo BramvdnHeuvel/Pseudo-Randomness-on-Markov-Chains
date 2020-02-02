@@ -1,13 +1,18 @@
+from encode import find_seed_for_value
 from markov import MarkovChain
-import random
+import random, json
 
-# Bouw de Markovketen
-m = MarkovChain()
-m.load('names.txt')
+dic = {}
 
-# random.seed(5)
+for i in range(1000):
+    if i % 100 == 0:
+        print(f"Finding a seed for value {i}...")
 
-for _ in range(10):
-    m.print_name()
+    try:
+        attempt = find_seed_for_value(i)
+    except OverflowError:
+        dic[i] = "Too big"
+    else:
+        dic[i] = attempt["fittingSeed"]["value"]
 
-m.save()
+json.dump(dic, open('efficiency.json', 'w'))
