@@ -1,5 +1,23 @@
 from markov import MarkovChain
-import random
+import random, math
+
+def entropy(num):
+    """
+        Calculate the entropy of a given integer.
+    """
+    dic = {'0': 0, '1': 0, 'total': 0}
+    for char in encode(num):
+        if char in ['1', '0']:
+            dic[char] += 1
+            dic['total'] += 1
+    p0, p1 = dic['0']/dic['total'], dic['1']/dic['total']
+
+    S = 0
+    if p0 > 0:
+        S = S - p0 * math.log2(p0)
+    if p1 > 0:
+        S = S - p1 * math.log2(p1)
+    return S
 
 def find_seed_for_value(num, max_value=1000000, raw=False):
     if not raw:
@@ -33,7 +51,7 @@ def find_seed_for_value(num, max_value=1000000, raw=False):
             if i > 0:
                 print(f"Considered option {i} for value {num}...")
     else:
-        raise OverflowError(f"Could not find a fitting seed under value {max_value}."
+        raise OverflowError(f"Could not find a fitting seed under value {max_value}.")
 
 def encode(num):
     """
