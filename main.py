@@ -48,4 +48,4 @@ def search_for_more_values():
         json.dump(dic, open('efficiency.json', 'w'))
 
 if __name__ == '__main__':
-    search_for_more_values()
+    convert_number_to_efficiency()

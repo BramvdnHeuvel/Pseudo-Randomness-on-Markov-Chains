@@ -1,6 +1,13 @@
 from markov import MarkovChain
 import random, math
 
+def binary_len(num):
+    i = 1
+    n = 1
+    while n <= num:
+        i, n = i + 1, n * 2
+    return i - 1
+
 def entropy(num):
     """
         Calculate the entropy of a given integer.
