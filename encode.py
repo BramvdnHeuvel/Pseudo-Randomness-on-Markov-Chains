@@ -1,4 +1,3 @@
-from markov import MarkovChain
 import random, math
 
 def binary_len(num):
@@ -34,14 +33,10 @@ def find_seed_for_value(num, max_value=1000000, raw=False):
     else:
         good_word = num
 
-    m = MarkovChain()
-    m.load(good_word)
-
     for i in range(max_value):
         random.seed(encode(i))
-        word = m.get_name()
 
-        if word == good_word:
+        if seed_produces(good_word):
             return {
                 "fittingSeed": {
                     "value": i,
@@ -81,3 +76,40 @@ def encode(num):
             num = num - i
         else:
             val += '0'
+
+def seed_produces(word):
+    numbers = {
+        '0': {
+            'switch': [],
+            'stay': []
+        },
+        '1': {
+            'switch': [],
+            'stay': []
+        }
+    }
+
+    for i in range(1, len(word)-1):
+        a, b = word[i-1], word[i]
+
+        if a == b:
+            numbers[a]['stay'].append(random.random())
+        else:
+            numbers[a]['switch'].append(random.random())
+    
+    return is_disjoint(numbers['0']) and is_disjoint(numbers['1'])
+
+def is_disjoint(dic):
+    if len(dic['switch']) * len(dic['stay']) == 0:
+        return True
+
+    min_set_one, max_set_one = min(dic['switch']), max(dic['switch'])
+    min_set_two, max_set_two = min(dic['stay']), max(dic['stay'])
+
+    if min_set_one == min_set_two:
+        return False
+    
+    if min_set_one < min_set_two:
+        return max_set_one < min_set_two
+    else:
+        return max_set_two < min_set_one
